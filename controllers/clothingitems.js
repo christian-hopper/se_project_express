@@ -14,7 +14,7 @@ const getClothingItems = (req, res) => {
     .then((clothingItems) => res.status(OK).send(clothingItems))
     .catch((err) => {
       console.error(err);
-      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
 };
 
@@ -30,7 +30,7 @@ const createClothingItem = (req, res) => {
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST).send({ message: err.message });
       }
-      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
 };
 
@@ -45,7 +45,9 @@ const deleteClothingItem = (req, res) => {
           .status(NOT_FOUND)
           .send({ message: "Clothing item not found" });
       }
-      res.status(OK).send({ message: "Clothing item deleted successfully" });
+      return res
+        .status(OK)
+        .send({ message: "Clothing item deleted successfully" });
     })
     .catch((err) => {
       console.error(err);
@@ -54,7 +56,7 @@ const deleteClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: "Invalid clothing item ID" });
       }
-      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
 };
 
@@ -75,7 +77,7 @@ const likeClothingItem = (req, res) => {
           .status(NOT_FOUND)
           .send({ message: "Clothing item not found" });
       }
-      res.status(OK).send(clothingItem);
+      return res.status(OK).send(clothingItem);
     })
     .catch((err) => {
       console.error(err);
@@ -84,7 +86,7 @@ const likeClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: "Invalid clothing item ID" });
       }
-      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
 };
 
@@ -105,7 +107,7 @@ const unlikeClothingItem = (req, res) => {
           .status(NOT_FOUND)
           .send({ message: "Clothing item not found" });
       }
-      res.status(OK).send(clothingItem);
+      return res.status(OK).send(clothingItem);
     })
     .catch((err) => {
       console.error(err);
@@ -114,7 +116,7 @@ const unlikeClothingItem = (req, res) => {
           .status(BAD_REQUEST)
           .send({ message: "Invalid clothing item ID" });
       }
-      res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
+      return res.status(INTERNAL_SERVER_ERROR).send({ message: err.message });
     });
 };
 
