@@ -1,8 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const userRouter = require("./routes/users");
-const clothingRouter = require("./routes/clothingitems");
 const mainRouter = require("./routes/index");
+const { NOT_FOUND } = require("./utils/errors");
 
 const app = express();
 const { PORT = 3001 } = process.env;
@@ -25,9 +24,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", userRouter);
-app.use("/", clothingRouter);
 app.use("/", mainRouter);
+
+app.use((req, res) => {
+  res.status(NOT_FOUND).send({ message: "Resource not found" });
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
