@@ -1,8 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const mainRouter = require("./routes/index");
+const auth = require("./middlewares/auth");
+const { createUser, loginUser } = require("./controllers/users");
 
 const app = express();
+
+app.use(cors());
+
 const { PORT = 3001 } = process.env;
 
 mongoose
@@ -16,13 +22,15 @@ mongoose
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: "68ad2c6c2cd05e1b4dc7fa2f", // example user id
-  };
-  next();
-});
+// Signup and Signin routes
+app.post("/signup", createUser);
+app.post("/signin", loginUser);
 
+//GET /items
+app.use("/items", mainRouter);
+
+// Protected routes
+app.use(auth);
 app.use("/", mainRouter);
 
 app.listen(PORT, () => {
