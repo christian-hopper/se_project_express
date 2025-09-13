@@ -2,8 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const mainRouter = require("./routes/index");
-const auth = require("./middlewares/auth");
-const { createUser, loginUser } = require("./controllers/users");
 
 const app = express();
 
@@ -22,15 +20,7 @@ mongoose
 
 app.use(express.json());
 
-// Signup and Signin routes
-app.post("/signup", createUser);
-app.post("/signin", loginUser);
-
-//GET /items
-app.use("/items", mainRouter);
-
 // Protected routes
-app.use(auth);
 app.use("/", mainRouter);
 
 app.listen(PORT, () => {

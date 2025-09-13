@@ -12,19 +12,6 @@ const {
   INTERNAL_SERVER_ERROR,
 } = require("../utils/errors");
 
-// GET /users
-
-const getUsers = (req, res) => {
-  User.find({})
-    .then((users) => res.status(OK).send(users))
-    .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
-    });
-};
-
 // GET /users/:id
 
 const getCurrentUser = (req, res) => {
@@ -122,12 +109,18 @@ const loginUser = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      res.status(UNAUTHORIZED).send({ message: "Incorrect email or password" });
+      if (err.message === "Incorrect email or password") {
+        return res
+          .status(UNAUTHORIZED)
+          .send({ message: "Incorrect email or password" });
+      }
+      return res
+        .status(INTERNAL_SERVER_ERROR)
+        .send({ message: "An error has occurred on the server" });
     });
 };
 
 module.exports = {
-  getUsers,
   getCurrentUser,
   updateCurrentUser,
   createUser,
