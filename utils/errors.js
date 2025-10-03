@@ -6,6 +6,7 @@ const FORBIDDEN = 403;
 const NOT_FOUND = 404;
 const CONFLICT = 409;
 const INTERNAL_SERVER_ERROR = 500;
+const DUPLICATE_KEY_ERROR = 11000;
 
 module.exports = {
   BAD_REQUEST,

@@ -10,6 +10,7 @@ const {
   NOT_FOUND,
   CONFLICT,
   INTERNAL_SERVER_ERROR,
+  DUPLICATE_KEY_ERROR,
 } = require("../utils/errors");
 
 // GET /users/:id
@@ -72,21 +73,22 @@ const createUser = (req, res) => {
     .hash(password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
-      const userWithoutPassword = user.toObject();
-      delete userWithoutPassword.password;
-      res.status(CREATED).send(userWithoutPassword);
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.status(CREATED).send({ token });
     })
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {
         return res.status(BAD_REQUEST).send({ message: err.message });
       }
-      if (err.code === 11000) {
+      if (err.code === DUPLICATE_KEY_ERROR) {
         return res.status(CONFLICT).send({ message: "Email already in use" });
       }
       return res
         .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
+        .send({ message: "Server error" });
     });
 };
 
