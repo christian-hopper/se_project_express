@@ -4,10 +4,12 @@ const userRouter = require("./users");
 const clothingRouter = require("./clothingitems");
 const { createUser, loginUser } = require("../controllers/users");
 const { NOT_FOUND } = require("../utils/errors");
+const { getClothingItems } = require("../controllers/clothingitems");
 
 // Public routes (signup & signin)
 router.post("/signup", createUser);
 router.post("/signin", loginUser);
+router.get("/items", getClothingItems);
 
 // Protected routes
 router.use(auth);

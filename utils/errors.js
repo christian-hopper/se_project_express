@@ -15,6 +15,7 @@ module.exports = {
   NOT_FOUND,
   CONFLICT,
   INTERNAL_SERVER_ERROR,
+  DUPLICATE_KEY_ERROR,
   OK,
   CREATED,
 };
