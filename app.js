@@ -2,12 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { errors } = require("celebrate");
+require("dotenv").config();
+
 const mainRouter = require("./routes/index");
+
 const errorHandler = require("./middlewares/error-handler");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
 
 const app = express();
-
 const { PORT = 3001 } = process.env;
 
 // Enable CORS
