@@ -5,10 +5,14 @@ const clothingRouter = require("./clothingitems");
 const { createUser, loginUser } = require("../controllers/users");
 const { NOT_FOUND } = require("../utils/errors");
 const { getClothingItems } = require("../controllers/clothingitems");
+const {
+  validateUserBody,
+  validateLogin,
+} = require("../middlewares/validation");
 
 // Public routes (signup & signin)
-router.post("/signup", createUser);
-router.post("/signin", loginUser);
+router.post("/signup", validateUserBody, createUser);
+router.post("/signin", validateLogin, loginUser);
 router.get("/items", getClothingItems);
 
 // Protected routes

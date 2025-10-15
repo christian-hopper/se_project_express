@@ -1,90 +1,73 @@
 const ClothingItem = require("../models/clothingitem");
-const {
-  OK,
-  CREATED,
-  FORBIDDEN,
-  BAD_REQUEST,
-  NOT_FOUND,
-  INTERNAL_SERVER_ERROR,
-} = require("../utils/errors");
+const { OK, CREATED } = require("../utils/errors");
+const BadRequestError = require("../errors/BadRequestError");
+const NotFoundError = require("../errors/NotFoundError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 // GET /items
 
-const getClothingItems = (req, res) => {
+const getClothingItems = (req, res, next) => {
   ClothingItem.find({})
     .then((clothingItems) => res.status(OK).send(clothingItems))
     .catch((err) => {
-      console.error(err);
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
+      next(err);
     });
 };
 
 // POST /items
 
-const createClothingItem = (req, res) => {
+const createClothingItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
   ClothingItem.create({ name, weather, imageUrl, owner })
     .then((clothingItem) => res.status(CREATED).send(clothingItem))
     .catch((err) => {
-      console.error(err);
       if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({ message: err.message });
+        next(new BadRequestError("Invalid data provided for clothing item"));
+      } else {
+        next(err);
       }
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
     });
 };
 
 // DELETE /items/:itemId
 
-const deleteClothingItem = (req, res) => {
+const deleteClothingItem = (req, res, next) => {
   const { itemId } = req.params;
   const userId = req.user._id;
 
   ClothingItem.findById(itemId)
     .then((clothingItem) => {
       if (!clothingItem) {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: "Clothing item not found" });
+        throw new NotFoundError("Clothing item not found");
       }
       if (clothingItem.owner.toString() !== userId) {
-        return res.status(FORBIDDEN).send({
-          message: "You do not have permission to delete this clothing item",
-        });
+        throw new ForbiddenError(
+          "You do not have permission to delete this clothing item"
+        );
       }
       return ClothingItem.findByIdAndDelete(itemId);
     })
     .then((clothingItem) => {
       if (!clothingItem) {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: "Clothing item not found" });
+        throw new NotFoundError("Clothing item not found");
       }
       return res
         .status(OK)
         .send({ message: "Clothing item deleted successfully" });
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: "Invalid clothing item ID" });
+        next(new BadRequestError("Invalid clothing item ID"));
+      } else {
+        next(err);
       }
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
     });
 };
 
 // PUT /items/:itemId/likes
 
-const likeClothingItem = (req, res) => {
+const likeClothingItem = (req, res, next) => {
   const { itemId } = req.params;
   const userId = req.user._id;
 
@@ -95,28 +78,22 @@ const likeClothingItem = (req, res) => {
   )
     .then((clothingItem) => {
       if (!clothingItem) {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: "Clothing item not found" });
+        throw new NotFoundError("Clothing item not found");
       }
       return res.status(OK).send(clothingItem);
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: "Invalid clothing item ID" });
+        next(new BadRequestError("Invalid clothing item ID"));
+      } else {
+        next(err);
       }
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
     });
 };
 
 // DELETE /items/:itemId/likes
 
-const unlikeClothingItem = (req, res) => {
+const unlikeClothingItem = (req, res, next) => {
   const { itemId } = req.params;
   const userId = req.user._id;
 
@@ -127,22 +104,16 @@ const unlikeClothingItem = (req, res) => {
   )
     .then((clothingItem) => {
       if (!clothingItem) {
-        return res
-          .status(NOT_FOUND)
-          .send({ message: "Clothing item not found" });
+        throw new NotFoundError("Clothing item not found");
       }
       return res.status(OK).send(clothingItem);
     })
     .catch((err) => {
-      console.error(err);
       if (err.name === "CastError") {
-        return res
-          .status(BAD_REQUEST)
-          .send({ message: "Invalid clothing item ID" });
+        next(new BadRequestError("Invalid clothing item ID"));
+      } else {
+        next(err);
       }
-      return res
-        .status(INTERNAL_SERVER_ERROR)
-        .send({ message: "An error has occurred on the server" });
     });
 };
 
