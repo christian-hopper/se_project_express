@@ -7,11 +7,10 @@ This repository contains the **backend for the WTWR (What to Wear) web applicati
 ## Table of Contents
 
 - [Technologies](#technologies)
-- [API Endpoints](#api-endpoints)
-  - [Users](#users)
-  - [Clothing Items](#clothing-items)
+- [API Features](#api-features)
 - [Error Handling](#error-handling)
 - [Getting Started](#getting-started)
+- [Deployment](#deployment)
 - [Future Improvements](#future-improvements)
 
 ---
@@ -23,28 +22,17 @@ This repository contains the **backend for the WTWR (What to Wear) web applicati
 - **MongoDB** – NoSQL database for data storage
 - **Mongoose** – ODM for MongoDB to define schemas and models
 - **Validator** – Library for input validation
-
-## API Endpoints
-
-### Users
-
-| Method | Endpoint     | Description         | Request Body                          |
-| ------ | ------------ | ------------------- | ------------------------------------- |
-| GET    | `/users`     | Get all users       | None                                  |
-| GET    | `/users/:id` | Get a specific user | None                                  |
-| POST   | `/users`     | Create a new user   | `{ "name": "John", "avatar": "URL" }` |
+- **bcryptjs** - Password hashing
+- **jsonwebtoken** - JWT authentication
 
 ---
 
-### Clothing Items
+## API Features
 
-| Method | Endpoint               | Description                        | Request Body                                               |
-| ------ | ---------------------- | ---------------------------------- | ---------------------------------------------------------- |
-| GET    | `/items`               | Get all clothing items             | None                                                       |
-| POST   | `/items`               | Create a new clothing item         | `{ "name": "Shirt", "weather": "hot", "imageUrl": "URL" }` |
-| DELETE | `/items/:itemId`       | Delete a clothing item             | None                                                       |
-| PUT    | `/items/:itemId/likes` | Like a clothing item               | None                                                       |
-| DELETE | `/items/:itemId/likes` | Remove a like from a clothing item | None                                                       |
+- User Management: Create accounts, login, and update user profiles.
+- Items Management: Add, read, update, delete clothing items.
+- Likes: Users can like or unlike items.
+- Server-Side Validation: Ensures data integrity and security.
 
 ---
 
@@ -52,6 +40,23 @@ This repository contains the **backend for the WTWR (What to Wear) web applicati
 
 - **400 Bad Request** – Invalid input or malformed ID
 - **404 Not Found** – Resource does not exist
+- **409 Conflict** - Duplicate resource
 - **500 Internal Server Error** – Unexpected server errors
 
 All errors return a JSON object with a `message` property explaining the issue.
+
+---
+
+## Deployment
+
+- Base URL: [https://wtwr.spottt.com]
+- Deployed Backend API: [https://api.wtwr.spottt.com]
+- Frontend Application Repository: [https://github.com/christian-hopper/se_project_react]
+
+## Future Improvements
+
+- Add search and filtering for clothing items.
+- Enhance authentication with refresh tokens.
+- Add file uploads for user avatars and item images.
+
+---

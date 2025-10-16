@@ -90,10 +90,6 @@ const validateId = celebrate({
       "string.hex": 'The "itemId" must be a hexadecimal string',
       "string.length": 'The "itemId" must be 24 characters long',
     }),
-    id: Joi.string().hex().length(24).messages({
-      "string.hex": 'The "id" must be a hexadecimal string',
-      "string.length": 'The "id" must be 24 characters long',
-    }),
   }),
 });
 

@@ -3,8 +3,9 @@ const auth = require("../middlewares/auth");
 const userRouter = require("./users");
 const clothingRouter = require("./clothingitems");
 const { createUser, loginUser } = require("../controllers/users");
-const { NOT_FOUND } = require("../utils/errors");
 const { getClothingItems } = require("../controllers/clothingitems");
+const { NotFoundError } = require("../errors/NotFoundError");
+
 const {
   validateUserBody,
   validateLogin,
@@ -20,8 +21,8 @@ router.use(auth);
 router.use("/users", userRouter);
 router.use("/items", clothingRouter);
 
-router.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: "Resource not found" });
+router.use((req, res, next) => {
+  next(new NotFoundError("Resource not found"));
 });
 
 module.exports = router;

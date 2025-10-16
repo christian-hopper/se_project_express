@@ -67,7 +67,11 @@ const createUser = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      res.status(CREATED).send({ token });
+
+      const userWithoutPassword = user.toObject();
+      delete userWithoutPassword.password;
+
+      res.status(CREATED).send({ user: userWithoutPassword, token });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
