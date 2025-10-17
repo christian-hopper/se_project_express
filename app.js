@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/wtwr_db")
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to database");
   })
