@@ -53,6 +53,12 @@ All errors return a JSON object with a `message` property explaining the issue.
 - Deployed Backend API: [https://api.wtwr.spottt.com]
 - Frontend Application Repository: [https://github.com/christian-hopper/se_project_react]
 
+---
+
+## Project Pitch Video
+
+Check out (Project Pitch)[https://drive.google.com/file/d/1U-ILJT4PB5aiiFfSqa-5xQr12UGtd62Q/view?usp=sharing], where I describe my project and some challenges I faced while building it.
+
 ## Future Improvements
 
 - Add search and filtering for clothing items.
