@@ -1,3 +1,5 @@
+const winston = require("winston");
+
 const ClothingItem = require("../models/clothingitem");
 const { OK, CREATED } = require("../utils/errors");
 const BadRequestError = require("../errors/BadRequestError");
@@ -17,8 +19,8 @@ const getClothingItems = (req, res, next) => {
 // POST /items
 
 const createClothingItem = (req, res, next) => {
-  console.log("Request Body:", req.body);
-  console.log("User ID:", req.user ? req.user._id : "No user info");
+  winston.log("Request Body:", req.body);
+  winston.log("User ID:", req.user ? req.user._id : "No user info");
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
   ClothingItem.create({ name, weather, imageUrl, owner })

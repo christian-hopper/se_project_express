@@ -9,12 +9,12 @@ const auth = (req, res, next) => {
   }
 
   const token = authorization.replace("Bearer ", "");
-  jwt.verify(token, JWT_SECRET, (err, payload) => {
+  return jwt.verify(token, JWT_SECRET, (err, payload) => {
     if (err) {
       return next(new UnauthorizedError("Invalid or expired token"));
     }
     req.user = payload;
-    next();
+    return next();
   });
 };
 

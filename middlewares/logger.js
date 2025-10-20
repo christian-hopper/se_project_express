@@ -4,9 +4,10 @@ const expressWinston = require("express-winston");
 // Create a custom format for log messages
 const messageFormat = winston.format.combine(
   winston.format.timestamp(),
-  winston.format.printf(({ level, message, meta, timestamp }) => {
-    return `${timestamp} ${level}: ${meta.error?.stack || message}`;
-  })
+  winston.format.printf(
+    ({ level, message, meta, timestamp }) =>
+      `${timestamp} ${level}: ${meta.error?.stack || message}`
+  )
 );
 
 // Logs all requests

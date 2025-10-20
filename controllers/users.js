@@ -18,9 +18,8 @@ const getCurrentUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === "CastError") {
         return next(new BadRequestError("Invalid user ID"));
-      } else {
-        next(err);
       }
+      return next(err);
     });
 };
 
@@ -42,12 +41,12 @@ const updateCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
-      } else if (err.name === "CastError") {
-        next(new BadRequestError("Invalid user ID"));
-      } else {
-        next(err);
+        return next(new BadRequestError(err.message));
       }
+      if (err.name === "CastError") {
+        return next(new BadRequestError("Invalid user ID"));
+      }
+      return next(err);
     });
 };
 
@@ -60,7 +59,7 @@ const createUser = (req, res, next) => {
     return next(new BadRequestError("Email and password are required"));
   }
 
-  bcrypt
+  return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, avatar, email, password: hash }))
     .then((user) => {
@@ -75,12 +74,12 @@ const createUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        next(new BadRequestError(err.message));
-      } else if (err.code === DUPLICATE_KEY_ERROR) {
-        next(new ConflictError("Email already in use"));
-      } else {
-        next(err);
+        return next(new BadRequestError(err.message));
       }
+      if (err.code === DUPLICATE_KEY_ERROR) {
+        return next(new ConflictError("Email already in use"));
+      }
+      return next(err);
     });
 };
 
@@ -92,7 +91,7 @@ const loginUser = (req, res, next) => {
   if (!email || !password) {
     return next(new BadRequestError("Email and password are required"));
   }
-  User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
@@ -101,10 +100,9 @@ const loginUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.message === "Incorrect email or password") {
-        next(new UnauthorizedError("Incorrect email or password"));
-      } else {
-        next(err);
+        return next(new UnauthorizedError("Incorrect email or password"));
       }
+      return next(err);
     });
 };
 
